@@ -1,7 +1,7 @@
 [workspace]
 name = "unicode_mojo"
 version = "0.1.0"
-description = "Unicode normalization and alphabetic properties in pure Mojo"
+description = "Unicode normalization, properties, case folding, and text primitives in pure Mojo"
 channels = [
     "https://conda.modular.com/max-nightly",
     "https://conda.modular.com/max",
@@ -15,7 +15,7 @@ requires-pixi = "==0.84.2"
 [package]
 name = "unicode_mojo"
 version = "0.1.0"
-description = "Unicode normalization and alphabetic properties in pure Mojo"
+description = "Unicode normalization, properties, case folding, and text primitives in pure Mojo"
 license = "MIT AND Unicode-3.0"
 license-file = "LICENSES"
 
@@ -37,10 +37,16 @@ mojo-compiler = "==1.3.0.dev2026111005"
 mojo = "==1.3.0.dev2026111005"
 
 [tasks]
-test = "mojo run -I . tests/test_unicode.mojo"
+test-api = "mojo run -I . tests/test_unicode.mojo"
+test-properties = "mojo run -I . tests/test_unicode_properties.mojo"
+test-casing-utf8 = "mojo run -I . tests/test_unicode_casing_utf8.mojo"
+test-regex-ranges = "mojo run -I . tests/test_regex_numeric_ranges.mojo"
+test-regex-folds = "mojo run -I . tests/test_regex_numeric_folds.mojo"
+test = { depends-on = ["test-api", "test-properties", "test-casing-utf8", "test-regex-ranges", "test-regex-folds"] }
+tables-check = "python3 scripts/regex_unicode_tables.py --from-fixtures --check"
 conformance = "mojo run -I . tests/conformance.mojo"
 example = "mojo run -I . examples/normalize.mojo"
 format = "mblack --target-version mojo --line-length 80 unicode_mojo tests examples"
 format-check = "mblack --check --target-version mojo --line-length 80 unicode_mojo tests examples"
 precompile = "mkdir -p build && mojo precompile --Werror unicode_mojo -o build/unicode_mojo.mojoc"
-check = { depends-on = ["format-check", "test", "conformance", "example", "precompile"] }
+check = { depends-on = ["format-check", "test", "conformance", "example", "precompile", "tables-check"] }
