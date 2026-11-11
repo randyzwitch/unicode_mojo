@@ -1,5 +1,6 @@
 """Unicode 17 normalization primitives with static tables and reusable scratch."""
 from std.collections.string import Codepoint
+from .utf8 import unsafe_append_codepoint
 from unicode_mojo._normalization_tables import (
     properties,
     decomposition,
@@ -64,15 +65,6 @@ def _codepoint(row: _Row, mut at: Int) -> Int:
     var scalar, width = Codepoint.unsafe_decode_utf8_codepoint(row[at:])
     at += width
     return Int(scalar)
-
-
-@always_inline
-def _append_utf8(mut out: List[UInt8], cp: Int):
-    var scalar = Codepoint(unsafe_unchecked_codepoint=UInt32(cp))
-    var start = len(out)
-    var size = scalar.utf8_byte_length()
-    out.resize(start + size, 0)
-    _ = scalar.unsafe_write_utf8(out.unsafe_ptr().unsafe_offset(start))
 
 
 def _decompose(mut out: List[Int], cp: Int, compatible: Bool):
@@ -234,7 +226,7 @@ struct Normalizer(Movable):
             self._scratch
         )
         for k in range(size):
-            _append_utf8(output, self._scratch[k])
+            unsafe_append_codepoint(output, self._scratch[k])
 
     def normalize(mut self, text: StringSpan) -> String:
         """Return an owned normalized string, reusing this normalizer's scratch."""
