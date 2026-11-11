@@ -42,7 +42,8 @@ test-properties = "mojo run -I . tests/test_unicode_properties.mojo"
 test-casing-utf8 = "mojo run -I . tests/test_unicode_casing_utf8.mojo"
 test-regex-ranges = "mojo run -I . tests/test_regex_numeric_ranges.mojo"
 test-regex-folds = "mojo run -I . tests/test_regex_numeric_folds.mojo"
-test = { depends-on = ["test-api", "test-properties", "test-casing-utf8", "test-regex-ranges", "test-regex-folds"] }
+test-text = "mojo run -I . tests/test_text_primitives.mojo"
+test = { depends-on = ["test-api", "test-properties", "test-casing-utf8", "test-regex-ranges", "test-regex-folds", "test-text"] }
 tables-check = "python3 scripts/regex_unicode_tables.py --from-fixtures --check"
 conformance = "mojo run -I . tests/conformance.mojo"
 example = "mojo run -I . examples/normalize.mojo"

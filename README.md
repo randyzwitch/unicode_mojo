@@ -108,6 +108,47 @@ The `utf8` module exposes `unsafe_append_codepoint(output, cp)` and
 (excluding surrogates) or a leading byte from validated UTF-8 respectively.
 These primitives do not validate arbitrary bytes or code-point integers.
 
+## Counting, slicing, reversal, and trimming
+
+`count_codepoints(text)` counts Unicode scalars using bounded SIMD blocks and
+a scalar tail. Combining marks count separately; none of these operations
+use grapheme clusters.
+
+```mojo
+from unicode_mojo import (
+    count_codepoints, codepoint_slice_bounds, slice_codepoints,
+    reverse_codepoints, CodepointTrimSet,
+)
+
+
+def main():
+    print(count_codepoints("aé中😀"))  # 4
+    print(codepoint_slice_bounds("aé中😀", 1, 2))  # (1, 6), byte bounds
+    print(slice_codepoints("aé中😀", -2))  # 中😀
+    print(reverse_codepoints("a\u0301"))  # combining acute followed by a
+    var trim = CodepointTrimSet("x😀")
+    print(trim.trim("x😀é😀"))  # é
+```
+
+Slice offsets and lengths use code points. Negative offsets count from the
+end; any negative length takes the remainder; out-of-range requests clip to
+the text. `codepoint_slice_bounds()` returns half-open byte offsets so callers
+can construct views without copying. `slice_codepoints()` returns an owned
+string. `reverse_codepoints_into(text, output)` appends independently of the
+existing output prefix; input must not alias output.
+
+`CodepointTrimSet` owns the supplied character set and can be reused across
+strings. An empty set removes nothing. For ASCII whitespace, pass
+`" \t\n\r\v\f"` explicitly. `bounds(text, leading=True, trailing=True)` returns
+half-open byte offsets; `trim()` returns an owned string. Trimming removes
+individual code points from the selected edges, not substrings or graphemes.
+
+All input is borrowed validated UTF-8. The `utf8` module also provides
+`unsafe_next_codepoint_boundary`, `unsafe_previous_codepoint_boundary`, and
+`unsafe_advance_codepoints`. Their byte offsets must be known code-point
+boundaries in the documented range. Advancement clips to the end and treats
+nonpositive counts as zero; these low-level operations do not validate indices.
+
 ## Pixi dependency
 
 Use Pixi **0.84.2**. In a consumer workspace, add:
