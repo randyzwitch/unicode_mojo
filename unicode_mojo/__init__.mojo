@@ -25,3 +25,11 @@ from unicode_mojo.properties import (
 )
 from unicode_mojo.casefold import CASE_FOLD_SOURCE, CaseFolds
 from unicode_mojo.casing import AlphabeticTitleCaser, alphabetic_titlecase
+from unicode_mojo.utf8 import count_codepoints
+from unicode_mojo.transform import (
+    CodepointTrimSet,
+    codepoint_slice_bounds,
+    slice_codepoints,
+    reverse_codepoints,
+    reverse_codepoints_into,
+)
