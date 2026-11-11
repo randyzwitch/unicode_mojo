@@ -1,0 +1,6 @@
+.pixi/
+build/
+dist/
+*.mojoc
+*.conda
+__pycache__/
