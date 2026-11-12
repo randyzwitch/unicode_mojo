@@ -1,8 +1,5 @@
 # Third-party notices
 
-The implementation was extracted from Randy Zwitch's MIT-licensed
-`dataframe_mojo` project. Its copyright notice is preserved in `LICENSE`.
-
 ## Unicode data
 
 `unicode_mojo/_normalization_tables.mojo` and
