@@ -1,0 +1,23 @@
+package:
+  name: unicode_mojo
+  version: "0.1.0"
+
+source:
+  path: ..
+
+build:
+  noarch: generic
+  script:
+    - mkdir -p "$PREFIX/lib/mojo/unicode_mojo"
+    - cp unicode_mojo/*.mojo "$PREFIX/lib/mojo/unicode_mojo/"
+
+requirements:
+  run:
+    - mojo-compiler >=1.3.0.dev2026111005,<2
+
+about:
+  license: MIT AND Unicode-3.0
+  license_file:
+    - LICENSE
+    - THIRD_PARTY_NOTICES.md
+    - LICENSES
