@@ -156,13 +156,13 @@ Use Pixi **0.84.2**. In a consumer workspace, add:
 ```toml
 [dependencies]
 unicode_mojo = { git = "https://github.com/randyzwitch/unicode_mojo.git" }
-mojo = "==1.3.0.dev2026111005"
+mojo = ">=1.3.0.dev2026112405,<2"
 ```
 
 Consumers using Pixi source builds also need `preview = ["pixi-build"]` and the
 `https://prefix.dev/pixi-build-backends` channel. Compiled libraries must use
-the exact compiler that built them. This package's build and runtime compiler
-pins match the workspace. Add the dependency to a consuming package's host and
+the exact compiler that built them. The workspace and source package use the same
+compiler version range. Add the dependency to a consuming package's host and
 runtime dependencies as well as its development environment.
 
 For reproducible builds, add `rev = "<full-commit-sha>"` to the Git dependency
